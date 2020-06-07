@@ -1,44 +1,27 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# drive-editor
 
-## Available Scripts
+Very simple text editor storing all files on Google Drive in directory `drive-editor`. Uses recommended security scope which permits the app to create/update/delete only the files created in it.
 
-In the project directory, you can run:
+## Setup
 
-### `yarn start`
+It is a bit more complicated since you need to setup a Google API project, enable drive for it and connect the app. Most of the problematic setup can be done with the guide linked in the instructions.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+1. Clone the project.
+2. Visit the directory in terminal and run `yarn` to install dependencies.
+3. Visit [Browser QuickStart](https://developers.google.com/drive/api/v3/quickstart/js) guide and use `Enable the Drive API` and `Create API key` to easily obtain credentials without digging through the Google Console.
+4. You are interested in `clientId` and `apiKey`. Save them to `src/config.json`:
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+```json
+{
+  "clientId": "XXXXXXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.apps.googleusercontent.com",
+  "apiKey": "XXXXXXXXXXXXXXXXXXXXXXXXX-XXXXXXXXXXXXX"
+}
+```
 
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+5. Update URI of the local app in console
+   - Visit [Google APIs Console](https://console.developers.google.com/).
+   - Open the project.
+   - Go to `Credentials`.
+   - Open `OAuth client`.
+   - Update `URIs` from `http://localhost:8000` to `http://localhost:3000` (used by CRA).
+6. Done!
