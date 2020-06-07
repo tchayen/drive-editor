@@ -43,11 +43,11 @@ const Editor = ({ value, setValue, loading }: Props) => {
     }
 
     setSaving("in-progress");
-    setLastSaved(new Date());
 
     await setValue({ ...value, content: state });
 
     setSaving("done");
+    setLastSaved(new Date());
 
     ref = setTimeout(() => {
       setSaving("no");
