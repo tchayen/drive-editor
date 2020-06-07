@@ -7,23 +7,23 @@ export const YEAR = 12 * MONTH;
 
 const UNITS = [SECOND, MINUTE, HOUR, DAY, MONTH, YEAR];
 
-export function* nextInterval() {
-  let interval = 0;
-  yield interval;
+export function* nextInterval(): Generator<number> {
+  yield 0;
 
+  let interval = 0;
   let unit = 0;
 
   while (unit < UNITS.length - 1) {
     while (interval < UNITS[unit + 1]) {
       interval += UNITS[unit];
-      yield interval;
+      yield UNITS[unit];
     }
     unit += 1;
   }
 
   while (true) {
     interval += UNITS[unit];
-    yield interval;
+    yield UNITS[unit];
   }
 }
 
@@ -44,7 +44,11 @@ export default (ms: number) => {
   if (ms < SECOND) {
     return "second ago";
   } else if (ms < MINUTE) {
-    return "minute ago";
+    const amount = Math.floor(ms / SECOND);
+    if (amount < 2) {
+      return `second ago`;
+    }
+    return `few seconds ago`;
   } else if (ms < HOUR) {
     return format(ms, "minute", "minutes", MINUTE);
   } else if (ms < DAY) {

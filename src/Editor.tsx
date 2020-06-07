@@ -4,7 +4,6 @@ import useShortcuts from "./useShortcuts";
 import { getKeyboardTip, getOs } from "./os";
 import { FileContent } from "./types";
 import Button from "./Button";
-import friendlyTime from "./friendlyTime";
 import useTimeDistance from "./useTimeDistance";
 
 type Props = {
@@ -20,7 +19,7 @@ const Editor = ({ value, setValue, loading }: Props) => {
   const [state, setState] = useState(derivedValue);
   const [saving, setSaving] = useState<"no" | "in-progress" | "done">("no");
 
-  const [lastSaved, setLastSaved] = useTimeDistance();
+  const [lastSaved, setLastSaved] = useTimeDistance(5000);
 
   let ref: any = null;
 
@@ -32,7 +31,9 @@ const Editor = ({ value, setValue, loading }: Props) => {
     return () => {
       clearTimeout(ref);
     };
-  });
+    // We want to clearTimeout when unmounting.
+    // eslint-disable-next-line
+  }, []);
 
   const save = async () => {
     if (value === null || value === "loading") {
@@ -81,7 +82,7 @@ const Editor = ({ value, setValue, loading }: Props) => {
         flex: 1,
       }}
     >
-      <div style={{ marginBottom: 16, marginLeft: 16 }}>
+      <div style={{ marginLeft: 16 }}>
         <div
           style={{
             display: "flex",
@@ -104,11 +105,9 @@ const Editor = ({ value, setValue, loading }: Props) => {
             <div style={{ color: "#888" }}>{tip}+S to save</div>
           ) : null}
         </div>
-        {lastSaved && (
-          <div style={{ fontSize: 14, color: "#888", marginTop: 8 }}>
-            Last saved {lastSaved}
-          </div>
-        )}
+        <div style={{ fontSize: 14, color: "#888", marginTop: 8 }}>
+          {lastSaved ? <>Last saved {lastSaved}</> : <div>&nbsp;</div>}
+        </div>
       </div>
       <TextArea
         placeholder="Start typing here..."
