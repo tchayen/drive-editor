@@ -4,7 +4,7 @@ const clientId = process.env.CLIENT_ID;
 const apiKey = process.env.API_KEY;
 
 const data = `{
-  "clientId": ${clientId}",
+  "clientId": "${clientId}",
   "apiKey": "${apiKey}"
 }
 `;
