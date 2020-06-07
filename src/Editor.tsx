@@ -4,6 +4,8 @@ import useShortcuts from "./useShortcuts";
 import { getKeyboardTip, getOs } from "./os";
 import { FileContent } from "./types";
 import Button from "./Button";
+import friendlyTime from "./friendlyTime";
+import useTimeDistance from "./useTimeDistance";
 
 type Props = {
   value: FileContent | "loading" | null;
@@ -17,6 +19,8 @@ const Editor = ({ value, setValue, loading }: Props) => {
 
   const [state, setState] = useState(derivedValue);
   const [saving, setSaving] = useState<"no" | "in-progress" | "done">("no");
+
+  const [lastSaved, setLastSaved] = useTimeDistance();
 
   let ref: any = null;
 
@@ -34,7 +38,9 @@ const Editor = ({ value, setValue, loading }: Props) => {
     if (value === null || value === "loading") {
       return;
     }
+
     setSaving("in-progress");
+    setLastSaved(new Date());
 
     await setValue({ ...value, content: state });
 
@@ -75,30 +81,40 @@ const Editor = ({ value, setValue, loading }: Props) => {
         flex: 1,
       }}
     >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          marginTop: 16,
-          marginBottom: 16,
-        }}
-      >
-        <Button
-          disabled={saving !== "no"}
-          style={{ marginLeft: 16, marginRight: 16 }}
-          onClick={save}
+      <div style={{ marginBottom: 16, marginLeft: 16 }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            marginTop: 16,
+          }}
         >
-          Save
-        </Button>
-        {saving === "done" ? (
-          <div>Saved!</div>
-        ) : saving === "in-progress" ? (
-          <div style={{ color: "#888" }}>Saving...</div>
-        ) : tip ? (
-          <div style={{ color: "#888" }}>{tip}+S to save</div>
-        ) : null}
+          <Button
+            disabled={saving !== "no"}
+            style={{ marginRight: 16 }}
+            onClick={save}
+          >
+            Save
+          </Button>
+          {saving === "done" ? (
+            <div>Saved!</div>
+          ) : saving === "in-progress" ? (
+            <div style={{ color: "#888" }}>Saving...</div>
+          ) : tip ? (
+            <div style={{ color: "#888" }}>{tip}+S to save</div>
+          ) : null}
+        </div>
+        {lastSaved && (
+          <div style={{ fontSize: 14, color: "#888", marginTop: 8 }}>
+            Last saved {lastSaved}
+          </div>
+        )}
       </div>
-      <TextArea value={state} onChangeText={setState} />
+      <TextArea
+        placeholder="Start typing here..."
+        value={state}
+        onChangeText={setState}
+      />
     </div>
   );
 };
