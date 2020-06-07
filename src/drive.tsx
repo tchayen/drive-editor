@@ -11,12 +11,12 @@ const discoveryDocs = [
 
 const scope = "https://www.googleapis.com/auth/drive.file";
 
-export const handleSignIn = () => {
-  google.auth2.getAuthInstance().signIn();
+export const handleSignIn = async () => {
+  await google.auth2.getAuthInstance().signIn();
 };
 
-export const handleSignOut = () => {
-  google.auth2.getAuthInstance().signOut();
+export const handleSignOut = async () => {
+  await google.auth2.getAuthInstance().signOut();
 };
 
 export const isSignedIn = () => {

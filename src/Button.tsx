@@ -1,28 +1,35 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, CSSProperties } from "react";
+
+const noop = () => {};
 
 type Props = {
   children: ReactNode;
   onClick: () => void;
+  disabled?: boolean;
+  text?: boolean;
+  style?: CSSProperties;
 };
 
-const Button = ({ onClick, children }: Props) => (
+const Button = ({ onClick, disabled, children, text, style }: Props) => (
   <button
-    onClick={onClick}
+    onClick={disabled ? noop : onClick}
     style={{
-      cursor: "pointer",
+      cursor: disabled ? "not-allowed" : "pointer",
       border: "none",
-      paddingLeft: 16,
-      paddingRight: 16,
+      paddingLeft: text ? 0 : 16,
+      paddingRight: text ? 0 : 16,
       height: 32,
       borderRadius: 4,
       fontFamily: "Inter",
       fontSize: 15,
       fontWeight: 500,
-      backgroundColor: "#000",
-      color: "#fff",
+      backgroundColor: text ? "transparent" : "#000",
+      color: text ? "#000" : "#fff",
       justifyContent: "center",
       alignItems: "center",
       display: "flex",
+      opacity: disabled ? 0.5 : 1,
+      ...style,
     }}
   >
     {children}

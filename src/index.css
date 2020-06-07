@@ -19,6 +19,37 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+input {
+  width: 180px;
+  height: 32px;
+  padding-left: 8px;
+  padding-right: 8px;
+  border: 2px solid #fff;
+  background-color: #fff;
+  font-family: Inter;
+  font-size: 15px;
+  border-radius: 4px;
+}
+
+input:focus {
+  background-color: #fff;
+  border-color: #000;
+  outline: none;
+}
+
+textarea {
+  border: none;
+  flex: 1;
+  padding: 16px;
+  font-family: Inter;
+  font-size: 15px;
+  background-color: #fff;
+}
+
+textarea:focus {
+  outline: none;
+}
+
 button:focus {
   outline: none;
 }
@@ -26,4 +57,8 @@ button:focus {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+* {
+  box-sizing: border-box;
 }
