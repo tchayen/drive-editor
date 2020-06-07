@@ -3,7 +3,7 @@ import getFriendlyTime, { nextInterval } from "./getFriendlyTime";
 
 export default (
   waitUntilMs: number = 0
-): [string | null, (date: Date) => void] => {
+): [string | null, (date: Date | null) => void] => {
   const [start, setStart] = useState<Date | null>(null);
   const [friendly, setFriendly] = useState<string | null>(null);
   const generator = useRef(nextInterval());
@@ -14,14 +14,9 @@ export default (
       const loop = () => {
         const nextTimeout = generator.current.next().value;
         ref.current = setTimeout(() => {
-          const friendlyTime = getFriendlyTime(
-            new Date().getTime() - start.getTime()
-          );
-          const nextValue =
-            new Date().getTime() - start.getTime() < waitUntilMs
-              ? null
-              : friendlyTime;
-
+          const delta = new Date().getTime() - start.getTime();
+          const friendlyTime = getFriendlyTime(delta);
+          const nextValue = delta < waitUntilMs ? null : friendlyTime;
           setFriendly(nextValue);
           loop();
         }, nextTimeout);
@@ -34,8 +29,6 @@ export default (
       setFriendly(null);
     };
   }, [waitUntilMs, start]);
-
-  console.log(friendly, start);
 
   if (friendly === null || start === null) {
     return [null, setStart];

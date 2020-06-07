@@ -25,7 +25,9 @@ const Editor = ({ value, setValue, loading }: Props) => {
 
   useEffect(() => {
     setState(derivedValue);
-  }, [derivedValue]);
+    setSaving("no");
+    setLastSaved(null);
+  }, [derivedValue, setLastSaved]);
 
   useEffect(() => {
     return () => {
