@@ -21,7 +21,7 @@ const Button = ({ onClick, disabled, children, text, style }: Props) => (
       height: 32,
       borderRadius: 4,
       fontFamily: "Inter",
-      fontSize: 15,
+      fontSize: 16,
       fontWeight: 500,
       backgroundColor: text ? "transparent" : "#000",
       color: text ? "#000" : "#fff",

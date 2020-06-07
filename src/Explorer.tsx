@@ -1,7 +1,7 @@
 import React from "react";
 import { FileSystem, File, FileContent } from "./types";
 import CreateFile from "./CreateFile";
-import { deleteFile, listFilesInDirectory, moveToTrash } from "./fileSystem";
+import { listFilesInDirectory, moveToTrash } from "./fileSystem";
 
 type Props = {
   fileSystem: FileSystem;

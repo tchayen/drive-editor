@@ -15,6 +15,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
+  font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -27,7 +28,7 @@ input {
   border: 2px solid #fff;
   background-color: #fff;
   font-family: Inter;
-  font-size: 15px;
+  font-size: 16px;
   border-radius: 4px;
 }
 
@@ -42,7 +43,7 @@ textarea {
   flex: 1;
   padding: 16px;
   font-family: Inter;
-  font-size: 15px;
+  font-size: 16px;
   background-color: #fff;
 }
 
