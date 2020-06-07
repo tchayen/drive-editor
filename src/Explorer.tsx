@@ -3,6 +3,8 @@ import { FileSystem, File, FileContent } from "./types";
 import CreateFile from "./CreateFile";
 import { listFilesInDirectory, moveToTrash } from "./fileSystem";
 
+const noop = () => {};
+
 type Props = {
   fileSystem: FileSystem;
   setFileSystem: (fileSystem: FileSystem) => void;
@@ -53,36 +55,42 @@ const Explorer = ({
       <div style={{ marginTop: 16 }}>
         {!fileSystem.syncInProgress ? (
           fileSystem.files.length > 0 ? (
-            fileSystem.files.map((file) => (
-              <div
-                key={file.id}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  marginBottom: 8,
-                }}
-              >
+            fileSystem.files.map((file) => {
+              const isActive =
+                isFileOpen && (openFile as FileContent).id === file.id;
+              return (
                 <div
-                  onClick={() => onOpenFile(file)}
+                  key={file.id}
                   style={{
-                    cursor: "pointer",
-                    color:
-                      isFileOpen && (openFile as FileContent).id === file.id
-                        ? "#000"
-                        : "#888",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    marginBottom: 8,
                   }}
                 >
-                  {file.name}
+                  <div
+                    onClick={isActive ? noop : () => onOpenFile(file)}
+                    style={{
+                      cursor: isActive ? "default" : "pointer",
+                      color: isActive ? "#000" : "#888",
+                    }}
+                  >
+                    {file.name}
+                  </div>
+                  {!isActive && (
+                    <div
+                      onClick={() => handleRemove(file)}
+                      style={{
+                        cursor: "pointer",
+                        marginLeft: 16,
+                      }}
+                    >
+                      ✕
+                    </div>
+                  )}
                 </div>
-                <div
-                  onClick={() => handleRemove(file)}
-                  style={{ cursor: "pointer", marginLeft: 16 }}
-                >
-                  ✕
-                </div>
-              </div>
-            ))
+              );
+            })
           ) : (
             <div style={{ color: "#888" }}>No files</div>
           )
