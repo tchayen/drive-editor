@@ -1,6 +1,7 @@
 import React from "react";
 import { FileSystem, File, FileContent } from "./types";
 import CreateFile from "./CreateFile";
+import { deleteFile, listFilesInDirectory } from "./fileSystem";
 
 type Props = {
   fileSystem: FileSystem;
@@ -29,17 +30,51 @@ const Explorer = ({
             fileSystem.files.map((file) => (
               <div
                 key={file.id}
-                onClick={() => onOpenFile(file)}
                 style={{
-                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
                   marginBottom: 8,
-                  color:
-                    isFileOpen && (openFile as FileContent).id === file.id
-                      ? "#000"
-                      : "#888",
                 }}
               >
-                {file.name}
+                <div
+                  onClick={() => onOpenFile(file)}
+                  style={{
+                    cursor: "pointer",
+                    color:
+                      isFileOpen && (openFile as FileContent).id === file.id
+                        ? "#000"
+                        : "#888",
+                  }}
+                >
+                  {file.name}
+                </div>
+                <div
+                  onClick={async () => {
+                    // eslint-disable-next-line
+                    confirm(`Are you sure you want to remove ${file.name}?`);
+
+                    setFileSystem({
+                      folderId: fileSystem.folderId,
+                      syncInProgress: true,
+                      files: [],
+                    });
+                    await deleteFile(file.id);
+
+                    const files = await listFilesInDirectory(
+                      fileSystem.folderId
+                    );
+
+                    setFileSystem({
+                      folderId: fileSystem.folderId,
+                      syncInProgress: false,
+                      files,
+                    });
+                  }}
+                  style={{ cursor: "pointer", marginLeft: 16 }}
+                >
+                  ✕
+                </div>
               </div>
             ))
           ) : (

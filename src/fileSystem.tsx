@@ -95,6 +95,12 @@ export const readFile: (id: ID) => Promise<string> = async (id: ID) => {
   return response.body;
 };
 
+export const deleteFile: (id: ID) => Promise<void> = async (id: ID) => {
+  await google.client.drive.files.delete({
+    fileId: id,
+  });
+};
+
 export const checkIfExists: (
   name: string,
   mimeType: string
