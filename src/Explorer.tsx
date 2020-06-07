@@ -52,7 +52,13 @@ const Explorer = ({
                 <div
                   onClick={async () => {
                     // eslint-disable-next-line
-                    confirm(`Are you sure you want to remove ${file.name}?`);
+                    const shouldRemove = confirm(
+                      `Are you sure you want to remove ${file.name}?`
+                    );
+
+                    if (!shouldRemove) {
+                      return;
+                    }
 
                     setFileSystem({
                       folderId: fileSystem.folderId,
