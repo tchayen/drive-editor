@@ -53,7 +53,7 @@ const Explorer = ({
                   onClick={async () => {
                     // eslint-disable-next-line
                     const shouldRemove = confirm(
-                      `Are you sure you want to remove ${file.name}?`
+                      `Are you sure you want to remove '${file.name}'?`
                     );
 
                     if (!shouldRemove) {

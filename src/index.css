@@ -63,3 +63,7 @@ code {
 * {
   box-sizing: border-box;
 }
+
+::placeholder {
+  color: #888;
+}
