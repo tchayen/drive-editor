@@ -2,6 +2,8 @@
 
 Very simple text editor storing all files on Google Drive in directory `drive-editor`. Uses recommended security scope which permits the app to create/update/delete only the files created in it.
 
+[Live demo](https://drive-editor.now.sh)
+
 ## Setup
 
 It is a bit more complicated since you need to setup a Google API project, enable drive for it and connect the app. Most of the problematic setup can be done with the guide linked in the instructions.
