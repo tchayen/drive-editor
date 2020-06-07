@@ -1,7 +1,7 @@
 import React from "react";
 import { FileSystem, File, FileContent } from "./types";
 import CreateFile from "./CreateFile";
-import { deleteFile, listFilesInDirectory } from "./fileSystem";
+import { deleteFile, listFilesInDirectory, moveToTrash } from "./fileSystem";
 
 type Props = {
   fileSystem: FileSystem;
@@ -59,7 +59,7 @@ const Explorer = ({
                       syncInProgress: true,
                       files: [],
                     });
-                    await deleteFile(file.id);
+                    await moveToTrash(file.id);
 
                     const files = await listFilesInDirectory(
                       fileSystem.folderId

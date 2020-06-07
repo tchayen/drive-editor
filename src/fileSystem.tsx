@@ -101,6 +101,29 @@ export const deleteFile: (id: ID) => Promise<void> = async (id: ID) => {
   });
 };
 
+export const moveToTrash: (id: ID) => Promise<void> = async (id: ID) => {
+  const metadata = {
+    fileId: id,
+    trashed: true,
+  };
+
+  const accessToken = google.auth.getToken().access_token;
+  const form = new FormData();
+  form.append(
+    "metadata",
+    new Blob([JSON.stringify(metadata)], { type: MimeTypes.json })
+  );
+
+  await fetch(
+    `https://www.googleapis.com/upload/drive/v3/files/${id}?uploadType=multipart`,
+    {
+      method: "PATCH",
+      headers: new Headers({ Authorization: `Bearer ${accessToken}` }),
+      body: form,
+    }
+  );
+};
+
 export const checkIfExists: (
   name: string,
   mimeType: string
