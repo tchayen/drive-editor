@@ -18,6 +18,32 @@ const Explorer = ({
 }: Props) => {
   const isFileOpen = openFile !== null && openFile !== "loading";
 
+  const handleRemove = async (file: File) => {
+    // eslint-disable-next-line
+    const shouldRemove = confirm(
+      `Are you sure you want to remove '${file.name}'?`
+    );
+
+    if (!shouldRemove) {
+      return;
+    }
+
+    setFileSystem({
+      folderId: fileSystem.folderId,
+      syncInProgress: true,
+      files: [],
+    });
+    await moveToTrash(file.id);
+
+    const files = await listFilesInDirectory(fileSystem.folderId);
+
+    setFileSystem({
+      folderId: fileSystem.folderId,
+      syncInProgress: false,
+      files,
+    });
+  };
+
   return (
     <div style={{ marginTop: 16 }}>
       <CreateFile
@@ -50,33 +76,7 @@ const Explorer = ({
                   {file.name}
                 </div>
                 <div
-                  onClick={async () => {
-                    // eslint-disable-next-line
-                    const shouldRemove = confirm(
-                      `Are you sure you want to remove '${file.name}'?`
-                    );
-
-                    if (!shouldRemove) {
-                      return;
-                    }
-
-                    setFileSystem({
-                      folderId: fileSystem.folderId,
-                      syncInProgress: true,
-                      files: [],
-                    });
-                    await moveToTrash(file.id);
-
-                    const files = await listFilesInDirectory(
-                      fileSystem.folderId
-                    );
-
-                    setFileSystem({
-                      folderId: fileSystem.folderId,
-                      syncInProgress: false,
-                      files,
-                    });
-                  }}
+                  onClick={() => handleRemove(file)}
                   style={{ cursor: "pointer", marginLeft: 16 }}
                 >
                   ✕
