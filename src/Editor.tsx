@@ -3,6 +3,7 @@ import TextArea from "./TextArea";
 import useShortcuts from "./useShortcuts";
 import { getKeyboardTip, getOs } from "./os";
 import { FileContent } from "./types";
+import Button from "./Button";
 
 type Props = {
   value: FileContent | "loading" | null;
@@ -15,7 +16,7 @@ const Editor = ({ value, setValue, loading }: Props) => {
     value !== null && value !== "loading" ? value.content : "";
 
   const [state, setState] = useState(derivedValue);
-  const [showSaved, setShowSaved] = useState(false);
+  const [saving, setSaving] = useState<"no" | "in-progress" | "done">("no");
 
   let ref: any = null;
 
@@ -29,19 +30,23 @@ const Editor = ({ value, setValue, loading }: Props) => {
     };
   });
 
+  const save = async () => {
+    if (value === null || value === "loading") {
+      return;
+    }
+    setSaving("in-progress");
+
+    await setValue({ ...value, content: state });
+
+    setSaving("done");
+
+    ref = setTimeout(() => {
+      setSaving("no");
+    }, 1500);
+  };
+
   useShortcuts({
-    s: async () => {
-      if (value === null || value === "loading") {
-        return;
-      }
-
-      await setValue({ ...value, content: state });
-
-      setShowSaved(true);
-      ref = setTimeout(() => {
-        setShowSaved(false);
-      }, 1500);
-    },
+    s: save,
   });
 
   if (loading) {
@@ -70,24 +75,29 @@ const Editor = ({ value, setValue, loading }: Props) => {
         flex: 1,
       }}
     >
-      {showSaved ? (
-        <div style={{ marginTop: 16, marginLeft: 16, marginBottom: 16 }}>
-          Saved!
-        </div>
-      ) : (
-        tip && (
-          <div
-            style={{
-              marginTop: 16,
-              marginLeft: 16,
-              color: "#888",
-              marginBottom: 16,
-            }}
-          >
-            {tip}+S to save
-          </div>
-        )
-      )}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          marginTop: 16,
+          marginBottom: 16,
+        }}
+      >
+        <Button
+          disabled={saving !== "no"}
+          style={{ marginLeft: 16, marginRight: 16 }}
+          onClick={save}
+        >
+          Save
+        </Button>
+        {saving === "done" ? (
+          <div>Saved!</div>
+        ) : saving === "in-progress" ? (
+          <div style={{ color: "#888" }}>Saving...</div>
+        ) : tip ? (
+          <div style={{ color: "#888" }}>{tip}+S to save</div>
+        ) : null}
+      </div>
       <TextArea value={state} onChangeText={setState} />
     </div>
   );
