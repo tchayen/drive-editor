@@ -9,13 +9,6 @@ export const MimeTypes = {
   json: "application/json",
 };
 
-export type FileContent = {
-  id: ID;
-  name: string;
-  synced: Date;
-  content: string;
-};
-
 export const createDirectory: (name: string) => Promise<ID> = async (
   name: string
 ) => {

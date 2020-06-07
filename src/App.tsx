@@ -9,7 +9,7 @@ import {
   readFile,
   updateFile,
 } from "./fileSystem";
-import { FileSystem, FileContent, ID, File } from "./types";
+import { FileSystem, FileContent, File } from "./types";
 import Explorer from "./Explorer";
 import Editor from "./Editor";
 
