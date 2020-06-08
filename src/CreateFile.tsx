@@ -35,11 +35,15 @@ const CreateFile = ({ folderId, setFileSystem }: Props) => {
   };
 
   if (!showInput) {
-    return <Button onClick={() => setShowInput(true)}>Create file</Button>;
+    return (
+      <Button style={{ marginLeft: 16 }} onClick={() => setShowInput(true)}>
+        Create file
+      </Button>
+    );
   }
 
   return (
-    <div style={{ display: "flex" }}>
+    <div style={{ display: "flex", marginLeft: 16 }}>
       <Input
         autoFocus
         style={{ marginRight: 16 }}

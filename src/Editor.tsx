@@ -6,20 +6,22 @@ import { FileContent } from "./types";
 import Button from "./Button";
 import useTimeDistance from "./useTimeDistance";
 
+const TIMEOUT = 2000;
+
 type Props = {
-  value: FileContent | "loading" | null;
+  value: FileContent | null;
   setValue: (value: FileContent) => void;
   loading?: boolean;
 };
 
 const Editor = ({ value, setValue, loading }: Props) => {
   const derivedValue =
-    value !== null && value !== "loading" ? value.content : "";
+    value !== null && value.loading === false ? value.content : "";
 
   const [state, setState] = useState(derivedValue);
   const [saving, setSaving] = useState<"no" | "in-progress" | "done">("no");
 
-  const [lastSaved, setLastSaved] = useTimeDistance(5000);
+  const [lastSaved, setLastSaved] = useTimeDistance(TIMEOUT);
 
   let ref: any = null;
 
@@ -38,7 +40,7 @@ const Editor = ({ value, setValue, loading }: Props) => {
   }, []);
 
   const save = async () => {
-    if (value === null || value === "loading") {
+    if (value === null || value.loading || saving !== "no") {
       return;
     }
 
@@ -51,7 +53,7 @@ const Editor = ({ value, setValue, loading }: Props) => {
 
     ref = setTimeout(() => {
       setSaving("no");
-    }, 1500);
+    }, TIMEOUT);
   };
 
   useShortcuts({
@@ -60,7 +62,17 @@ const Editor = ({ value, setValue, loading }: Props) => {
 
   if (loading) {
     return (
-      <div style={{ color: "#888", marginTop: 16, marginLeft: 16 }}>
+      <div
+        style={{
+          color: "#888",
+          marginTop: 16,
+          marginLeft: 16,
+          display: "flex",
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         Loading...
       </div>
     );
@@ -68,7 +80,17 @@ const Editor = ({ value, setValue, loading }: Props) => {
 
   if (value === null) {
     return (
-      <div style={{ color: "#888", marginTop: 16, marginLeft: 16 }}>
+      <div
+        style={{
+          color: "#888",
+          marginTop: 16,
+          marginLeft: 16,
+          display: "flex",
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         No open file
       </div>
     );

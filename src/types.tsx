@@ -7,6 +7,7 @@ export type File = {
 
 export type FileContent = {
   id: ID;
+  loading: boolean;
   name: string;
   content: string;
 };

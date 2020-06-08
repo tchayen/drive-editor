@@ -9,7 +9,7 @@ import {
   readFile,
   updateFile,
 } from "./fileSystem";
-import { FileSystem, FileContent, File } from "./types";
+import { FileSystem, FileContent, File, ID } from "./types";
 import Explorer from "./Explorer";
 import Editor from "./Editor";
 
@@ -33,9 +33,7 @@ const App = () => {
   const [driveLoaded, setDriveLoaded] = useState(false);
   const [signedIn, setSignedIn] = useState(false);
   const [fileSystem, setFileSystem] = useState<FileSystem | null>(null);
-  const [openFile, setOpenFile] = useState<FileContent | "loading" | null>(
-    null
-  );
+  const [openFile, setOpenFile] = useState<FileContent | null>(null);
 
   const loadFiles = async () => {
     let id = await checkIfExists(DIRECTORY_NAME, MimeTypes.directory);
@@ -79,9 +77,9 @@ const App = () => {
   };
 
   const onOpenFile = async (file: File) => {
-    setOpenFile("loading");
+    setOpenFile({ id: file.id, loading: true, name: file.name, content: "" });
     const content = await readFile(file.id);
-    setOpenFile({ ...file, content });
+    setOpenFile({ ...file, content, loading: false });
   };
 
   const saveFile = async (file: FileContent) => {
@@ -118,11 +116,12 @@ const App = () => {
         style={{
           width: 360,
           backgroundColor: "#eee",
-          padding: 16,
           minHeight: "100vh",
         }}
       >
-        <Button onClick={onSignOut}>Sign out</Button>
+        <Button onClick={onSignOut} style={{ marginLeft: 16, marginTop: 16 }}>
+          Sign out
+        </Button>
         <Explorer
           fileSystem={fileSystem}
           setFileSystem={setFileSystem}
@@ -133,7 +132,7 @@ const App = () => {
       <Editor
         value={openFile}
         setValue={saveFile}
-        loading={openFile === "loading"}
+        loading={openFile !== null && openFile.loading}
       />
     </div>
   );

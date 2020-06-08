@@ -32,25 +32,18 @@ input {
   border-radius: 4px;
 }
 
-input:focus {
-  background-color: #fff;
-  border-color: #000;
-  outline: none;
-}
-
 textarea {
   border: none;
   flex: 1;
   padding: 16px;
-  font-family: Inter;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier,
+    monospace;
   font-size: 16px;
   background-color: #fff;
 }
 
-textarea:focus {
-  outline: none;
-}
-
+input:focus,
+textarea:focus,
 button:focus {
   outline: none;
 }
