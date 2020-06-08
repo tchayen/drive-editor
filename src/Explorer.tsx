@@ -4,11 +4,9 @@ import CreateFile from "./CreateFile";
 import { listFilesInDirectory, moveToTrash } from "./fileSystem";
 import FileIcon from "./icons/File";
 
-const noop = () => {};
-
 type ItemProps = {
   file: File;
-  handleRemove: (file: File) => Promise<void>;
+  onRemove: (file: File) => Promise<void>;
   openFile: FileContent | null;
   onOpenFile: (file: File) => void;
   isFileOpen: boolean;
@@ -16,7 +14,7 @@ type ItemProps = {
 
 const Item = ({
   file,
-  handleRemove,
+  onRemove,
   openFile,
   onOpenFile,
   isFileOpen,
@@ -25,13 +23,30 @@ const Item = ({
 
   const isActive = isFileOpen && openFile?.id === file.id;
   const isLoading = openFile?.loading && openFile.id === file.id;
-  const color = isActive ? "#000" : "#888";
+  const color = isActive || isLoading ? "#000" : "#888";
 
   const handleEnter = () => {
+    if (isActive || isLoading) {
+      return;
+    }
+
     setHovered(true);
   };
   const handleLeave = () => {
     setHovered(false);
+  };
+
+  const handleOpen = () => {
+    if (isActive || isLoading) {
+      return;
+    }
+
+    onOpenFile(file);
+    setHovered(false);
+  };
+
+  const handleRemove = () => {
+    onRemove(file);
   };
 
   return (
@@ -40,8 +55,7 @@ const Item = ({
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        opacity: isLoading ? 0.5 : 1,
-        backgroundColor: hover ? "#ddd" : "transparent",
+        backgroundColor: hover ? "#eee" : "transparent",
         paddingLeft: 16,
         cursor: isActive || isLoading ? "default" : "pointer",
       }}
@@ -49,7 +63,7 @@ const Item = ({
       onMouseLeave={handleLeave}
     >
       <div
-        onClick={isActive || isLoading ? noop : () => onOpenFile(file)}
+        onClick={handleOpen}
         style={{
           display: "flex",
           alignItems: "center",
@@ -60,14 +74,14 @@ const Item = ({
       >
         <FileIcon
           color={color}
-          background={hover ? "#ddd" : "#eee"}
+          background={hover ? "#eee" : "#fff"}
           style={{ marginRight: 8 }}
         />{" "}
         {file.name}
       </div>
       {!isActive && !isLoading && (
         <div
-          onClick={() => handleRemove(file)}
+          onClick={handleRemove}
           style={{
             cursor: "pointer",
             paddingLeft: 16,
@@ -99,7 +113,7 @@ const Explorer = ({
 }: Props) => {
   const isFileOpen = openFile !== null && !openFile.loading;
 
-  const handleRemove = async (file: File) => {
+  const onRemove = async (file: File) => {
     // eslint-disable-next-line
     const shouldRemove = confirm(
       `Are you sure you want to remove '${file.name}'?`
@@ -141,7 +155,7 @@ const Explorer = ({
                 openFile={openFile}
                 onOpenFile={onOpenFile}
                 isFileOpen={isFileOpen}
-                handleRemove={handleRemove}
+                onRemove={onRemove}
               />
             ))
           ) : (

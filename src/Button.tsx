@@ -23,7 +23,7 @@ const Button = ({ onClick, disabled, children, text, style }: Props) => (
       fontFamily: "Inter",
       fontSize: 16,
       fontWeight: 500,
-      backgroundColor: text ? "transparent" : "#000",
+      backgroundColor: text ? "transparent" : "#0366d6",
       color: text ? "#000" : "#fff",
       justifyContent: "center",
       alignItems: "center",

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { initClient, handleSignIn, handleSignOut, isSignedIn } from "./drive";
 import Button from "./Button";
 import {
@@ -34,6 +34,7 @@ const App = () => {
   const [signedIn, setSignedIn] = useState(false);
   const [fileSystem, setFileSystem] = useState<FileSystem | null>(null);
   const [openFile, setOpenFile] = useState<FileContent | null>(null);
+  const ref = useRef<Promise<string> | null>(null);
 
   const loadFiles = async () => {
     let id = await checkIfExists(DIRECTORY_NAME, MimeTypes.directory);
@@ -78,7 +79,14 @@ const App = () => {
 
   const onOpenFile = async (file: File) => {
     setOpenFile({ id: file.id, loading: true, name: file.name, content: "" });
-    const content = await readFile(file.id);
+    const promise = readFile(file.id);
+    ref.current = promise;
+    const content = await promise;
+
+    if (ref.current !== promise) {
+      return;
+    }
+
     setOpenFile({ ...file, content, loading: false });
   };
 
@@ -115,7 +123,7 @@ const App = () => {
       <div
         style={{
           width: 360,
-          backgroundColor: "#eee",
+          borderRight: "1px solid #eee",
           minHeight: "100vh",
         }}
       >

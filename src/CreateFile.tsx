@@ -34,6 +34,11 @@ const CreateFile = ({ folderId, setFileSystem }: Props) => {
     setShowInput(false);
   };
 
+  const onCancel = () => {
+    setFileName("");
+    setShowInput(false);
+  };
+
   if (!showInput) {
     return (
       <Button style={{ marginLeft: 16 }} onClick={() => setShowInput(true)}>
@@ -54,11 +59,7 @@ const CreateFile = ({ folderId, setFileSystem }: Props) => {
       <Button disabled={fileName.length === 0} onClick={handleClick}>
         Add
       </Button>
-      <Button
-        style={{ marginLeft: 16 }}
-        text
-        onClick={() => setShowInput(false)}
-      >
+      <Button style={{ marginLeft: 16 }} text onClick={onCancel}>
         Cancel
       </Button>
     </div>
